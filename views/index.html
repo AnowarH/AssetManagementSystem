@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Asset Management System</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/style.css"/>
+    <link rel="stylesheet" href="../node_modules/bootstrap-table/dist/bootstrap-table.css">
+    <script>let $= require('jquery');</script>
+    <script>require('popper.js');</script>
+    <script>require('bootstrap');</script>
+    <script>require('../node_modules/bootstrap-table/dist/bootstrap-table.js')</script>
+    <script src="../logic/index.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <nav class="navbar navbar-light justify-content-between sticky-top mt-3" style="background-color: #e3f2fd;">
+        <a class="navbar-brand" href="#" id="homeBtn">Home <span class="sr-only">(current)</span></a>
+        <form class="form-inline">
+          <a class="nav-link font-weight-bold text-success" href="#">Current Depot Name:  <span class="sr-only"></span></a>
+          <select type="text" class="form-control font-weight-bold text-success" style="background-color: #e3f2fd;" id="navSelectDepot">
+          </select>
+        </form>
+        <form class="form-inline">
+          <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="D:\Electron App\assetmanagementsystem\src\user-circle-solid.svg" width="40" height="40" alt="">
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#" id="profileSettingBtn">Profile Settings</a>
+            <a class="dropdown-item" href="#" id="createNewDepotBtn">Create New Depot</a>
+            <a class="dropdown-item" href="#" id="deleteDepotBtn">Delete Depot</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" id="logoutBtn">Logout</a>
+          </div>
+        </form>
+      </nav>
+      
+    <div class="alert alert-danger alert-dismissible" id="failedAlert" style="display:none;">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="alert alert-success alert-dismissible" id="successAlert" style="display:none;">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="alert alert-warning alert-dismissible" id="warningAlert" style="display:none;">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="alert alert-info alert-dismissible" id="infoAlert" style="display:none;">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+      <div class="row mt-3">
+        <div class="col-3 min-vh-90" id="yellow">
+        <div class="jumbotron" style="padding-top: 30px; padding-bottom: 20px;">
+            <span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="updateDepot" onfocus="txt_onfocus(this);">Update Depot</span><br>
+            <span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="addTitle">Add Stock to Depot</span><br>
+            <span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="removeTitle">Remove Title</span><br>
+            <span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="addValues">Add Values</span><br>
+            <span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="WithdrawValues">Withdraw Values</span><br>
+            <span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="addDividend">Add Dividend</span><br>
+            <span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="createReport">Create Report</span><br>            
+            <!--<span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="createDepot">Create Depot</span><br>            
+            <span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="deleteDepot">Delete Depot</span><br> -->
+            <span class="d-block p-2 bg-white text-dark mainBtn" href="#" role="button" id="newTitle">Add New Title</span><br>
+       </div>  
+        </div>
+        <div class="col-9">
+          <div class="row">
+            <div class="col">
+              <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header text-center">Total Number of Securites</div>
+                <div class="card-body">
+                  <p class="card-text text-center font-weight-bold" id="cardNumberSecurities">0
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header text-center">Total Depot Value</div>
+                <div class="card-body">
+                  <p class="card-text text-center font-weight-bold" id="cardDepotValue">0 Euro
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header text-center">Liquid Assets</div>
+                <div class="card-body">
+                  <p class="card-text text-center font-weight-bold" id="cardLiquidAssets">0 Euro
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+                <div class="card-header text-center">Total Investment</div>
+                <div class="card-body">
+                  <p class="card-text text-center font-weight-bold" id="cardTotalInvestment">0 Euro
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="jumbotron" style="padding-top: 20px; padding-bottom: 20px;" id="content">
+            <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">List of Security Titles in the depot</span>
+              <table class="table table-striped table-hover bg-white" id="myTable" data-search="true" data-height="460" data-pagination="true" data-pagination-pre-text="Previous" data-pagination-next-text="Next">
+                
+              </table>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <template id="addTitleTemp">
+      <form id="AddTitleForm">         
+        <div class="container-fluid shadow-lg p-3 mb-5 bg-white rounded">          
+          <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">Information About New Title:</span>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="titleIsin">ISIN</label>
+              <input type="text" class="form-control" id="titleIsin" required>
+            </div><!--
+            <div class="form-group col-md-6">
+              <label for="Wertpapierkennnummer">Wertpapierkennnummer (WKN)</label>
+              <input type="text" class="form-control" id="wknNr" name="wkn" required>
+            </div>-->
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="lot">Lot</label>
+              <input type="number" class="form-control" id="buyingLot" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="price">Buying Price pro Title</label>
+              <input type="number" class="form-control" id="buyingPrice" required>
+            </div>
+          </div>  
+          <div class="form-group">
+            <label for="securityName">Security Name</label>
+            <input type="text" class="form-control" id="securityName" placeholder="SAP AG">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              <label>Buying Costs</label>
+              <input type="number" class="form-control" id="buyingCosts" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label>Buying Date</label>
+              <input class="form-control" type="date" value="2020-08-19" id="buying-date" required>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="Tax">Tax</label>
+              <input type="number" class="form-control" id="inputTax" value="0">
+            </div>
+          </div>
+          <input type="submit" value="Add Title" class="btn btn-success" id="btn_addTitle"></input>
+        </div>
+      </form>
+    </template>
+    <template id="addDividendTemp">
+      <form id="AddDividendForm">      
+        <div class="container-fluid shadow-lg p-3 mb-5 bg-white rounded">           
+          <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">Information About Recieved Dividend:</span>
+          <div class="form-group">
+              <label for="securityNameAddDividend">Security Name</label>
+              <select type="text" class="form-control" id="securityNameAddDividend" required>
+                  
+              </select>
+            </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="titleIsin">ISIN</label>
+              <input type="text" class="form-control" id="titleIsinAddDividend" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="Wertpapierkennnummer">Wertpapierkennnummer (WKN)</label>
+              <input type="text" class="form-control" id="wknNrAddDividend" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="amount">Security Lot</label>
+              <input type="number" class="form-control" id="seurityLotAddDividend" required>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="dividend">Dividend per Security</label>
+              <input type="number" class="form-control" id="dividend" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="currency">Currency</label>
+              <select type="text" class="form-control" id="currency">
+                  <option>Euro</option>
+                  <option>USD</option>
+                  <option>Pfund</option>
+                </select>
+            </div>
+  
+          </div>
+  
+          <div class="form-row">
+              <div class="form-group col-md-4">
+                  <label>Devidend Record Date</label>
+                  <input class="form-control" type="date" value="2020-08-19" id="dividend-record-date-input">
+              </div>
+              <div class="form-group col-md-3">
+                  <label>Withholding Tax</label>
+                  <input type="number" class="form-control" id="WithholdingTax" value="0">
+              </div>
+              <div class="form-group col-md-4">
+                  <label>Devidend Recieved Date</label>
+                  <input class="form-control" type="date" value="2020-08-19" id="dividend-recived-date-input">
+              </div>
+          </div>
+          <div class="form-row">
+              <div class="form-group col-md-3">
+                  <label>Conversion Rate</label>
+                  <input type="number" class="form-control" id="conversionRateDividend" value="1">
+              </div>
+              <div class="form-group col-md-3">
+                  <label for="Tax">Other Costs</label>
+                  <input type="number" class="form-control" id="otherCostsDividend" value="0">
+              </div>
+          </div>
+          <input type="submit" class="btn btn-success" value="Add Dividend"></input>
+          </div>
+      </form>
+    </template> 
+    <template id="addValuesTemp">
+      <form id="AddValuesForm">      
+        <div class="container-fluid shadow-lg p-3 mb-5 bg-white rounded">            
+          <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">Information About New Value:</span>
+          <div class="form-row">
+              <div class="form-group col-md-6">
+                  <label for="depotName">Depot Name</label>
+                  <!--<select type="text" class="form-control" id="depotName">-->
+                    
+                  <input type="text" readonly class="form-control-plaintext border border-info" id="depotNameAddValues">
+              </div>
+            <div class="form-group col-md-6">
+              <label for="currentAmount">Current Amount: </label>
+              <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext border border-info" id="currentAmountAddValues" value="000 Euro">
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="newAmount">Deposit To Add</label>
+              <input type="number" class="form-control" id="newAmount" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              <label>Deposit Costs</label>
+              <input type="number" class="form-control" id="depositCosts" required value="0">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Deposit Date</label>
+              <input class="form-control" type="date" value="2020-08-19" id="deposit-date-input">
+            </div>
+          </div>
+          <input type="submit" class="btn btn-success" value="Update Depot"></input>
+        </div>
+      </form>
+    </template>  
+    <template id="removeTitleTemp">
+      <form id="removeTitleForm">
+      
+        <div class="container-fluid shadow-lg p-3 mb-5 bg-white rounded">  
+          
+          <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">Information About The Item To Be Removed:</span>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="sellingTitleName">Security Name</label>
+              <select type="text" class="form-control" id="sellingTitleName" required>
+                  
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-3 ">
+              <label for="soldLot">Lot</label>
+              <input type="number" class="form-control" id="soldLot" required>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="price">Selling Price / Security </label>
+              <input type="number" class="form-control" id="sellingPrice" required>
+            </div>            
+            <div class="form-group col-md-3">
+              <label>Selling Costs</label>
+              <input type="number" class="form-control" id="sellingCosts" value="0">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              <label>Selling Date</label>
+              <input class="form-control" type="date" value="2020-08-19" id="sellingDate">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="Tax">Selling Tax</label>
+              <input type="number" class="form-control" id="sellingTax" value="0">
+            </div>            
+            <div class="form-group col-md-3">
+              <label>Other Costs</label>
+              <input type="number" class="form-control" id="sellingOtherCosts" value="0">
+            </div>
+          </div>
+          <input type="submit" class="btn btn-success" value="Update Depot"></input>
+        </div>
+      </form>
+    </template> 
+    <template id="withdrawValuesTemp">
+      <form id="withdrawValuesForm">
+      
+        <div class="container-fluid shadow-lg p-3 mb-5 bg-white rounded">  
+          
+          <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">Information About Withdrawal Transaction:</span>
+          <div class="form-row">
+              <div class="form-group col-md-6">
+                  <label for="depotName">Depot Name</label>
+                  <input type="text" readonly class="form-control-plaintext border border-info" id="depotName" >
+              </div>
+            <div class="form-group col-md-6">
+              <label for="currentAmount">Current Amount: </label>
+              <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext border border-info" id="currentAmountWithdrawValues">
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="newAmount">Amount To Withdraw</label>
+              <input type="number" class="form-control" id="amountToWithdraw" required>
+            </div>
+          </div>
+         <div class="form-row">
+            <div class="form-group col-md-3">
+              <label>Withdraw Costs</label>
+              <input type="number" class="form-control" id="withdrawCosts" value="0">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Withdraw Date</label>
+              <input class="form-control" type="date" value="2020-08-19" id="withdraw-date-input" required>
+            </div>
+          </div>
+          <input type="submit" class="btn btn-success" value="Update Depot"></input>
+        </div>
+      </form>
+    </template>
+    <template id="createDepotTemp">
+      <form id="createDepotForm">
+        <div class="container-fluid shadow-lg p-3 mb-5 bg-white rounded">  
+        
+        <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">Insert Your Depot Information Below:</span>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="depotName">New Depot Name</label>
+                <input type="text" class="form-control" id="depotName" placeholder="Your Depot Name" required>
+            </div>
+          <div class="form-group col-md-6">
+            <label for="currentAmount">Current Depot Value: </label>
+            <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plantext" id="currentAmount" value="0 Euro" required>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="initialAmount">Initial Deposit To Add</label>
+            <input type="number" class="form-control" id="initialAmount" value="0" required>
+          </div>
+        </div>
+       <div class="form-row">
+          <div class="form-group col-md-3">
+            <label>Depot Initial Costs</label>
+            <input type="number" class="form-control" id="depotCosts" value="0" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Opening Date</label>
+            <input class="form-control" type="date" value="2020-08-19" id="depot-opening-date-input" required>
+          </div>
+        </div>
+        <input type="submit" class="btn btn-success" value="Create Depot"></input>
+        </div>
+    </form>
+    </template>
+    <template id="addNewTitleTemp">
+      <form id="addNewTitleForm">
+      
+        <div class="container-fluid shadow-lg p-3 mb-5 bg-white rounded">  
+          
+          <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">Information About New Security To Be Added:</span>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="sellingTitleName">Security Name</label>
+              <input type="text" class="form-control" id="newSecurityName" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="soldLot">ISIN</label>
+              <input type="text" class="form-control" id="newIsin" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="price">WKN (Wertpapierkennnummer) </label>
+              <input type="text" class="form-control" id="newWKN">
+            </div>            
+            <div class="form-group col-md-4">
+              <label>Symbol</label>
+              <input type="text" class="form-control" id="newSymbol">
+            </div>
+          </div>
+          <input type="submit" class="btn btn-success" value="Add New Security"></input>
+        </div>
+      </form>
+    </template>
+    <!-- Information Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLongTitle">Information</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="infoModalContent">
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLongTitle">Confirmation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="confirmationModalContent">
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="discardChangesBtn">Discard</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveChangesBtn">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

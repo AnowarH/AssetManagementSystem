@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>submit demo</title>
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../css/style.css"/>
+  <script>require('popper.js');</script>
+  <script>require('bootstrap');</script>
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <script src="../logic/queryDb.js"></script>
+</head>
+<body>
+  <div id="did">
+ <form id ="formtId" onsubmit="javascript: return function(event) {event.preventDefault()};">
+  <div>
+    <div class="container-fluid shadow-lg p-3 mb-5 bg-white rounded">          
+      <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">Information About New Title:</span>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="titleIsin">ISIN</label>
+          <input type="text" class="form-control" id="titleIsin">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="Wertpapierkennnummer">Wertpapierkennnummer (WKN)</label>
+          <input type="text" class="form-control" id="wknNr" name="wkn" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="amount">Amount</label>
+          <input type="number" class="form-control" id="amount" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="price">Buying Price pro Title</label>
+          <input type="number" class="form-control" id="buyingPrice" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="titleName">Title Name</label>
+        <input type="text" class="form-control" id="titleName" placeholder="SAP AG">
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <label>Buying Costs</label>
+          <input type="number" class="form-control" id="buyingCosts" required>
+        </div>
+        <div class="form-group col-md-4">
+          <label>Buying Date</label>
+          <input class="form-control" type="date" value="2020-08-19" id="example-date-input" required>
+        </div>
+        <div class="form-group col-md-3">
+          <label for="Tax">Tax</label>
+          <input type="number" class="form-control" id="inputTax" value="0">
+        </div>
+      </div>
+    <button class="btn btn-primary" id="btn_addTitle">Add Title</button>
+    </div>
+  </div>
+</form>
+</div>
+</body>
+</html>

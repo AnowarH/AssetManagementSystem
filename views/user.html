@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Asset Management System</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <script>let $= require('jquery');</script>
+    <script src="../logic/login.js"></script>
+  </head>
+  <body>
+
+    <div class="container" style="max-width: 600px; padding-top: 20px;" id="loginContainer">
+      <div class="jumbotron">
+        <h5 class="text-center">
+            Welcome to <br>
+            Asset Management System
+        </h5>
+        <div class="card">
+          <div class="card-header bg-dark text-white font-weight-bold text-center">
+            Registration Form
+          </div>
+          <div class="alert alert-danger alert-dismissible" id="failedAlert" style="display:none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="alert alert-success alert-dismissible" id="successAlert" style="display:none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="alert alert-warning alert-dismissible" id="warningAlert" style="display:none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="card-body">
+            <form id="userRegistrationForm">
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Fullname" aria-label="Username" aria-describedby="basic-addon1" id="userFullNameRegistrationForm" required>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" id="userNameRegistrationForm" required>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" id="userPass1RegistrationForm" required>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="Confirm Password" aria-label="password" aria-describedby="basic-addon1" id="userPass2RegistrationForm" required>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Security Code" aria-label="SecurityCode" aria-describedby="basic-addon1" id="securityCodeRegistrationForm" required>
+                </div>
+                <div>
+                  <input  type="submit" type="button" value="Register" class="btn btn-outline-primary float-right" id="btnRegisterUser">
+                </div>
+              </div>
+            </form>
+
+        </div>
+        <a href="login.html" target="_self">
+          Back to Login</a>
+      </div>
+    </div>
+  </body>
+</html>

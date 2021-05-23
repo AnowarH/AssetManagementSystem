@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <title>Asset Management System</title>
+    <script>let $= require('jquery');</script>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    
+    <script src="../logic/login.js"></script>
+  </head>
+  <body>
+    <div class="container vertical-center" style="max-width: 600px; padding-top: 80px;" id="loginContainer">
+      <div class="jumbotron">
+        <h4 class="text-center">
+            Welcome to <br>
+            Asset Management System
+        </h4>
+        <div class="card">
+          <div class="card-header bg-dark text-white font-weight-bold text-center">
+            Login Form
+          </div>
+          <div class="alert alert-danger alert-dismissible" id="failedAlert" style="display:none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="alert alert-success alert-dismissible" id="successAlert" style="display:none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="alert alert-warning alert-dismissible" id="warningAlert" style="display:none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="card-body">
+            <form id="loginForm">
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" id="loginUsername" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" id="loginPassword" required>
+                </div>              
+                
+              </div>
+              <input id="btnLogin" type="submit" value="Login" class="btn btn-outline-primary float-right"></input>
+            </form>
+            <!--<button type="button" class="btn btn-primary" onclick="printSth()">print sth</button>-->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col"><a href="user.html" target="_self">New User?</a></div>
+          <div class="col"><a href="credentialRecovery.html" target="_self" class="float-right">Forgot Credential?</a></div>
+        </div>
+        <span id="result"></span>
+      </div>
+    </div>
+    </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Asset Management System</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/style.css"/>
+    <script>let $= require('jquery');</script>
+    <script>require('popper.js');</script>
+    <script>require('bootstrap');</script>
+  </head>
+  <body>
+    <form id="AddDividendForm">
+      
+      <div class="container-fluid shadow-lg p-3 mb-5 bg-white rounded">  
+        
+        <span class="d-block p-2 bg-secondary text-white text-center font-weight-bold mb-3">Information About Recieved Dividend:</span>
+        <div class="form-group">
+            <label for="titleName">Title Name</label>
+            <input type="text" class="form-control" id="titleName" placeholder="SAP AG">
+          </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="titleIsin">ISIN</label>
+            <input type="text" class="form-control" id="titleIsin">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="Wertpapierkennnummer">Wertpapierkennnummer (WKN)</label>
+            <input type="text" class="form-control" id="wknNr">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="amount">Amount</label>
+            <input type="number" class="form-control" id="amount">
+          </div>
+          <div class="form-group col-md-3">
+            <label for="dividend">Dividend pro Title</label>
+            <input type="number" class="form-control" id="dividend">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="currency">Currency</label>
+            <select type="text" class="form-control" id="currency">
+                <option>Euro</option>
+                <option>USD</option>
+                <option>Pfund</option>
+              </select>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>Devidend Record Date</label>
+                <input class="form-control" type="date" value="2020-08-19" id="dividend-record-date-input">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Withholding Tax</label>
+                <input type="number" class="form-control" id="WithholdingTax">
+            </div>
+            <div class="form-group col-md-4">
+                <label>Devidend Recieved Date</label>
+                <input class="form-control" type="date" value="2020-08-19" id="dividend-recived-date-input">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Conversion Rate</label>
+                <input type="number" class="form-control" id="conversionRate">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="Tax">Extra Costs</label>
+                <input type="number" class="form-control" id="extraCosts">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Dividend</button>
+        </div>
+    </form>
+  </body>

@@ -1,0 +1,23 @@
+{
+  "name": "assetmanagementsystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.5.3",
+    "bootstrap-table": "^1.18.1",
+    "electron": "^11.0.2",
+    "jquery": "^3.5.1",
+    "nodemon": "^2.0.6",
+    "popper.js": "^1.16.1",
+    "request": "^2.88.2",
+    "sqlite3": "^5.0.0"
+  }
+}
