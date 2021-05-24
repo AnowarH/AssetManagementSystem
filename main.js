@@ -31,7 +31,6 @@ ipcMain.on('loggedIn', function(event, logged_in, current_user){
   }
 });
 ipcMain.on('getUserDepot', function(event, test){
-
   event.returnValue = currentUser.depot_list;
 });
 app.allowRendererProcessReuse = false;
