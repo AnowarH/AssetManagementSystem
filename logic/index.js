@@ -689,7 +689,9 @@ window.onload = function(){
                 let query = 'Select count(*) As count From depot Where '+"depot_name =" +"'"+document.getElementById('createDepotForm').elements.namedItem('depotName').value+"'";
                 //Check if depot with the same name already exists
                 dataExists(query).then(function(value){
+                    console.log("test")
                     if(value==false){
+                        console.log("test2")
                         alert('Depot with the same name already exists.\nTo create a new depot, provide a unique name.')
                     }else{
                         updateDatabase(document.getElementById('createDepotForm'), 'createDepot').then((value)=>{
