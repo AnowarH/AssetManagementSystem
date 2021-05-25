@@ -1,7 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { event } = require('jquery');
 const sqlite3 = require('sqlite3').verbose();
-const { dbQuery } = require('./logic/queryDb.js');
+const path = require('path');
+const dbQuery = require(path.join(__dirname,'logic','queryDb.js'));
+const User = require('./models/user')
+//const showAlert = require('./logic/login')
 var db;
 var currentUser;
 
@@ -24,13 +27,33 @@ app.whenReady().then(createWindow)
 app.whenReady().then(createDatabase())
 
 
-ipcMain.on('loggedIn', function(event, logged_in, current_user){
+ipcMain.on('loggedIn', async function(event, logged_in, user_name){
   if(logged_in == true){
-    currentUser = current_user;
+    await getUserProfileUsingUsername(user_name).then(e =>{
+      currentUser = e;
+    }).catch(err=>{
+      //showAlert("warningAlert", "User not found")
+      console.log(err);
+    })
     window.loadFile('views/index.html')
   }
 });
-ipcMain.on('getUserDepot', function(event, test){
+ipcMain.on('getUserDepot', async function(event){//./db/app.db
+  const db = await dbQuery.open('./db/app.db');
+  let query = "SELECT d.depot_name  FROM users as u left join depot as d on(u.user_id = d.user_id) where u.user_name = '"+currentUser.user_name+"'";
+  if(db.includes("opened")){
+      var depot = await dbQuery.all(query);
+      if(depot != undefined && depot.length > 0){
+          let depotName = []
+          depot.forEach(element => {
+              depotName.push(element.depot_name)
+          });
+          currentUser.depot_list = depotName
+          await dbQuery.close();
+      }else{
+          await dbQuery.close();
+      }
+  }    
   event.returnValue = currentUser.depot_list;
 });
 app.allowRendererProcessReuse = false;
@@ -83,5 +106,33 @@ function openDB(path) {
           
       }
   )   
+  })
+}
+
+ipcMain.on('getCurrentUser', (event)=>{event.returnValue = currentUser})
+
+async function getUserProfileUsingUsername(user_name){
+  const db = await dbQuery.open('./db/app.db');
+  let query = "SELECT u.user_name, u.user_id, u.email_address, u.birth_date, d.depot_name  FROM users as u left join depot as d on(u.user_id = d.user_id) where u.user_name = '"+user_name+"'";
+  if(db.includes("opened")){
+      var users = await dbQuery.all(query);
+      if(users != undefined && users.length > 0){
+          let depotName = []
+          users.forEach(element => {
+              depotName.push(element.depot_name)
+          });
+          currentUser = new User(users[0].user_name, users[0].user_id, users[0].email_address, users[0].birth_date, depotName)
+          await dbQuery.close();
+      }else{
+          await dbQuery.close();
+      }
+  }        
+  return new Promise((resolve, reject)=>{
+      if(currentUser){
+          resolve(currentUser)
+      }else{
+          reject(false)
+      }
+
   })
 }

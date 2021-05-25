@@ -12,7 +12,9 @@ window.onload = function(){
     var currentDepot = undefined;
     var userDepotListHtlm = undefined;
     userDepotList = userDepotList.filter(e => e !== null);
-    if(userDepotList.length>0){getDepotNameHtml(userDepotList)}
+    if(userDepotList.length>0){
+        userDepotListHtlm = getDepotNameHtml(userDepotList)
+    }
     if(userDepotListHtlm != undefined){
         document.querySelector("#navSelectDepot").insertAdjacentHTML('beforeend', userDepotListHtlm);        
         var currentDepotName = $('#navSelectDepot :selected').text();
@@ -686,13 +688,8 @@ window.onload = function(){
                 } 
             }
             if($('#createDepotForm').length){
-                let query = 'Select count(*) As count From depot Where '+"depot_name =" +"'"+document.getElementById('createDepotForm').elements.namedItem('depotName').value+"'";
-                //Check if depot with the same name already exists
-                dataExists(query).then(function(value){
-                    console.log("test")
-                    if(value==false){
-                        console.log("test2")
-                        alert('Depot with the same name already exists.\nTo create a new depot, provide a unique name.')
+                if(userDepotList.includes(document.getElementById('createDepotForm').elements.namedItem('depotName').value)){
+                    showAlert("failedAlert", "Depot with the same name alrerady exists!","To create a new depot, provide a unique name.")
                     }else{
                         updateDatabase(document.getElementById('createDepotForm'), 'createDepot').then((value)=>{
                             if(value){
@@ -706,7 +703,7 @@ window.onload = function(){
                             }
                         });                    
                     }
-                })
+                
 
             }
             if($('#AddDividendForm').length){
@@ -838,14 +835,17 @@ window.onload = function(){
             });
             return deferred.promise();
         }
-        if(formType == 'createDepot'){
-            columns = 'depot_name, current_depot_value, initial_value_to_add, costs, opening_date, insert_date, insert_time';
+        if(formType == 'createDepot'){           
+
+            columns = 'depot_name, current_depot_value, initial_value_to_add, costs, opening_date, user_id, insert_date, insert_time';
             values = [];
             values.push("'"+form.elements.namedItem('depotName').value+"'"); //depot name
             values.push(0); //depot current amount
             values.push(parseFloat(form.elements.namedItem('initialAmount').value)); //new amount to add to
             values.push(parseFloat(form.elements.namedItem('depotCosts').value)); //costs for adding new amount to depot
             values.push("'"+form.elements.namedItem('depot-opening-date-input').value+"'"); // opening date of new depot
+            var u = ipcRenderer.sendSync("getCurrentUser");
+            values.push("'"+u.user_id+"'");
             values.push("'"+new Date().toISOString().replace('T', ' ').substr(0, 10)+"'"); //date part of today
             values.push("'"+new Date().toISOString().replace('T', ' ').substr(11)+"'"); //time of now
             var val = values.toString();            
@@ -861,6 +861,7 @@ window.onload = function(){
                 }
             });
             return deferred.promise();
+            
         }
         if(formType =='AddTitle'){
             columns = 'depot_name, isin, lot, bid_price, buying_cost, buying_date, tax, insert_date, insert_time';

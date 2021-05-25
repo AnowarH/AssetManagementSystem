@@ -1,8 +1,8 @@
 var path = require('path');
 const dbQuery = require(path.join(__dirname,'..','logic','queryDb.js'));
 const ipc = require('electron').ipcRenderer;
+const User = require('../models/user')
 
-var currentUser = undefined;
 
 
 window.onload = function(){
@@ -10,14 +10,14 @@ window.onload = function(){
         if($('#loginForm').length){
             const loginUsername = document.getElementById('loginUsername').value
             const loginPassword = document.getElementById('loginPassword').value
-            getUserProfile(loginUsername, loginPassword).then((value)=>{
-                if(value == true){
-                    console.log(currentUser);
-                    ipc.send('loggedIn',true, currentUser);
-                }else{
-                    showAlert('failedAlert', "No user found with the given name.")
+            checkUserExists(loginUsername, loginPassword).then(e =>{
+                if(e == true){
+                    ipc.send('loggedIn',true, loginUsername);
                 }
-            });
+            }).catch(err =>{
+                console.log(err)
+                showAlert('failedAlert', "No user found with the given name.")
+            })
             return false;
         }
         if($('#userRegistrationForm').length){
@@ -93,35 +93,50 @@ return deferred.promise();
 }
 
 async function getUserProfile(user_name, user_password){
-var deferred = $.Deferred();
-const db = await dbQuery.open('./db/app.db');
-let query = "SELECT u.user_name, u.user_id, u.email_address, u.birth_date, d.depot_name  FROM users as u left join depot as d on(u.user_id = d.user_id) where u.user_name = '"+user_name+"' and u.password = '"+user_password+"'";
-if(db.includes("opened")){
-    var users = await dbQuery.all(query);
-    if(users != undefined && users.length > 0){
-        let depotName = []
-        users.forEach(element => {
-            depotName.push(element.depot_name)
-        });
-        currentUser = new user(users[0].user_name, users[0].user_id, users[0].email_address, users[0].birth_date, depotName)
-        deferred.resolve(true);
-    }else{
-        deferred.resolve(false);
+    var deferred = $.Deferred();
+    const db = await dbQuery.open('./db/app.db');
+    let query = "SELECT u.user_name, u.user_id, u.email_address, u.birth_date, d.depot_name  FROM users as u left join depot as d on(u.user_id = d.user_id) where u.user_name = '"+user_name+"' and u.password = '"+user_password+"'";
+    if(db.includes("opened")){
+        var users = await dbQuery.all(query);
+        if(users != undefined && users.length > 0){
+            let depotName = []
+            users.forEach(element => {
+                depotName.push(element.depot_name)
+            });
+            currentUser = new user(users[0].user_name, users[0].user_id, users[0].email_address, users[0].birth_date, depotName)
+            deferred.resolve(true);
+        }else{
+            deferred.resolve(false);
+        }
     }
-}
-await dbQuery.close();
-return deferred.promise();
+    await dbQuery.close();
+    return deferred.promise(currentUser);
 }
 
-class user{
-constructor(user_name, user_id, email_address, birth_date, depot_list){
-    this.user_name = user_name;
-    this.email_address = email_address;
-    this.user_id = user_id;
-    this.birth_date = birth_date;
-    this.depot_list = depot_list;
+//Checks if a user in db exists
+async function checkUserExists(user_name, user_password){
+    var userFound = false;
+    const db = await dbQuery.open('./db/app.db');
+    let query = "SELECT u.user_name, u.user_id, u.email_address, u.birth_date FROM users as u where u.user_name = '"+user_name+"' and u.password = '"+user_password+"'";
+    if(db.includes("opened")){
+        var users = await dbQuery.all(query);
+        if(users != undefined && users.length > 0){
+            userFound = true;
+            await dbQuery.close();
+        }else{
+            await dbQuery.close();
+        }
+    }        
+    return new Promise((resolve, reject)=>{
+        if(userFound){
+            resolve(userFound)
+        }else{
+            reject(userFound)
+        }
+
+    })
 }
-}
+
 function showAlert(alertType, message1, message2) {
 if(document.querySelector("#alertP1")){document.querySelector("#alertP1").parentNode.removeChild(document.querySelector("#alertP1"))}
 if(document.querySelector("#alertP2")){document.querySelector("#alertP2").parentNode.removeChild(document.querySelector("#alertP2"))}
@@ -160,3 +175,5 @@ switch (alertType){
         break;
 }
 }
+
+module.exports = showAlert;
